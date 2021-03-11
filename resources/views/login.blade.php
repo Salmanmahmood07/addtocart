@@ -26,6 +26,26 @@ href="{{url('/frontend_asset')}}/css/bootstrap.min.css"
 		<h1>Creative SignIn Form</h1>
 		<div class="main-agileinfo">
 			<div class="agileits-top">
+				@if(isset(Auth::user()->email))
+					    <script>window.location="/home";</script>
+					   @endif
+
+					   @if ($message = Session::get('error'))
+					   <div class="alert alert-danger alert-block">
+					    <button type="button" class="close" data-dismiss="alert">×</button>
+					    <strong>{{ $message }}</strong>
+					   </div>
+					   @endif
+
+					   @if (count($errors) > 0)
+					    <div class="alert alert-danger">
+					     <ul>
+					     @foreach($errors->all() as $error)
+					      <li>{{ $error }}</li>
+					     @endforeach
+					     </ul>
+					    </div>
+					   @endif
 				<form class="form-horizontal form-material"  method="POST" id="loginform" action="{{url('/user_authenticate')}}">
 
 					{!! csrf_field() !!}

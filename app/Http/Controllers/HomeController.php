@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Session;
+use DB;
+use App\Models\User;
+use App\Models\Product;
+use App\Models\Cart;
 class HomeController extends Controller
 {
     /**
@@ -13,7 +17,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('index');
+        $value=Session::get('user_id');
+        $user=User::where('id', $value)->first();
+        $data['product']=Product::all();
+        return view('index', $data)->with('user',$user);
     }
 
     /**

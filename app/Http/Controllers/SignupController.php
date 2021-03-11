@@ -94,7 +94,7 @@ class SignupController extends Controller
       {
       return back()->withErrors($validator)->withInput();
     }else {
-      $data = User::where(['email','=',$request->email])->first();
+      $data = User::where('email','=',$request->email)->first();
       if($data){
         if(\Hash::check($request->password, $data->password))
         {
@@ -128,9 +128,10 @@ class SignupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function logout()
     {
-        //
+        Auth::logout();
+        return redirect('/login');
     }
 
     /**
