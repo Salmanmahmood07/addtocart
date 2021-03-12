@@ -1,6 +1,6 @@
 <?php 
 use App\Http\Controllers\CartController;
-$total= CartController::cartitem();
+$totalcart= CartController::cartitem();
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,6 +8,15 @@ $total= CartController::cartitem();
 	<title>Add to cart</title>
   <link href="{{url('/home_assets')}}/css/signup.css" rel="stylesheet" type="text/css" media="all" />
   <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+  <link rel="stylesheet" href="{{url('/home_assets')}}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{url('/home_assets')}}/css/plugins.css">
+    <link rel="stylesheet" href="{{url('/home_assets')}}/style.css">
+
+    <!-- Cusom css -->
+     <link rel="stylesheet" href="{{url('/home_assets')}}/css/custom.css">
+
+    <!-- Modernizer js -->
+    <script src="{{url('/home_assets')}}/js/vendor/modernizr-3.5.0.min.js"></script>
 <style>
 ul {
   list-style-type: none;
@@ -48,7 +57,7 @@ li a:hover {
   <li><a href="{{('/signup')}}">Signup</a></li>
   <li><a href="{{('/login')}}">Login</a></li>
   <li><a href="{{('/addproduct')}}">Add Product</a></li>
-  <li><a href="{{('/cart')}}">Cart({{$total}})</a></li>
+  <li><a href="{{('/cart')}}">Cart({{$totalcart}})</a></li>
   <li> <a href="{{ url('/home/logout') }}">Logout</a></li>
 
 </ul>
@@ -72,7 +81,7 @@ li a:hover {
       
       <form action="/addtocart" method="POST">
         @csrf
-        <input type="text" class="form-control" name="product_id" 
+        <input type="hidden" class="form-control" name="product_id" 
         value="{{$products->id}}" name="id" id="id" required>
         <button class="btn btn-success">Add to cart</button>
       </form>

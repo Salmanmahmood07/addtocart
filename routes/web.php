@@ -21,6 +21,7 @@ use App\Http\Controllers\CartController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/home',[HomeController::class, 'index']);
 Route::get('/signup',[SignupController::class, 'signup']);
 Route::post('/usersignup',[SignupController::class, 'usersignup']);
@@ -33,4 +34,6 @@ Route::post('/createproduct',[ProductController::class, 'create']);
 
 Route::post('/addtocart',[CartController::class, 'addtocart']);
 Route::get('/cart',[CartController::class, 'index']);
+Route::post('/upcart',[CartController::class, 'store'])->name('upcart');
 Route::get('/dcart/{id}',[CartController::class, 'destroy']);
+Route::get('/order',[CartController::class, 'order']);

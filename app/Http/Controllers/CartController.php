@@ -23,15 +23,19 @@ class CartController extends Controller
     public function index()
     {
         $userid=Session::get('user_id');
-        $user=User::where('id', $userid)->first();
-        // $data['product']=Cart::all();
-        
-        $detail['product']=Cart::select('products.*')
-      ->join("products","cart.product_id", "=", "products.id")
-      ->where("cart.user_id" ,  $userid)
-      ->get();
+        $data =DB::table('cart')
+          ->join("products","cart.product_id", "=", "products.id")
+          ->select('products.*', 'cart.id as cart_id')
+          ->where("cart.user_id" ,  $userid)
+          ->get();
 
-        return view('product.cart', $detail)->with('user',$user);
+          $total = DB::table('cart')
+          ->join("products","cart.product_id", "=", "products.id")
+          ->where("cart.user_id" ,  $userid)
+          ->sum('products.product_price');
+//dd($total);
+          $detail['detail'] =Cart::first();
+      return view('product.cart', ['products'=>$data], ['total'=>$total])->with('detail',$detail);
     }
 
     /**
@@ -39,10 +43,16 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function order()
     {
-        
+        $userid=Session::get('user_id');
+        return DB::table('cart')
+          ->join("products","cart.product_id", "=", "products.id")
+          ->where("cart.user_id" ,  $userid)
+          ->sum('products.product_price');
+
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -53,10 +63,12 @@ class CartController extends Controller
     public function addtocart(Request $request)
     {
          // if($request->session()->has('user')){
+        
 
             $obj = new Cart();
             $obj->user_id=Session::get('user_id');
             $obj->product_id=$request->product_id;
+            $obj->quantity=1;
             //dd($obj);
             if($obj->save()){
               return Response::json(['success' => '1','message' => 'Product added to cart Successfully']);
@@ -97,9 +109,20 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function store(Request $request)
     {
-        //
+            $id=$request->cart_id;
+            $obj=Cart::find($id);
+            $obj->user_id=Session::get('user_id');
+            $obj->product_id=$request->product_id;
+            $obj->quantity=$request->quantity;
+            $obj->newprice=$request->newprice;
+// dd($obj)
+            if($obj->save()){
+              return Response::json(['success' => '1','message' => 'Cart updated Successfully']);
+            }else{
+              return Response::json(['success' => '0','validation'=>'0','message' => 'Something is wrong. Please try again.']);
+            }
     }
 
     /**
@@ -110,20 +133,8 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        $item=Cart::find($id);
-
-        if($item->delete())
-        {
-          return response()->json([
-            'success' => '1',
-            'message'=>'Image deleted seccessfully!'
-          ]);
-        }else{
-          return response()->json([
-            'success' => '0',
-            'message'=>'Something is wrong'
-          ]);
-        }
+        Cart::destroy($id);
+        return redirect('/cart');
     
     }
 }
