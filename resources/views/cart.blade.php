@@ -2,8 +2,9 @@
 use App\Http\Controllers\CartController;
 $totalcart= CartController::cartitem();
 ?>
+
 <!DOCTYPE html>
-<html>
+<html> 
 <head>
 	<title>Add to cart</title>
   <link href="{{url('/home_assets')}}/css/signup.css" rel="stylesheet" type="text/css" media="all" />
@@ -60,14 +61,14 @@ li a:hover {
   <li> <a href="{{ url('/home/logout') }}">Logout</a></li>
 
 </ul>
-@if(isset(Auth::user()->email))
+<!-- @if(isset(Auth::user()->email))
    <div class="alert alert-danger success-block">
      <strong>Welcome {{ Auth::user()->name }}</strong>
      <br/>
     </div>
    @else
     <script>window.location = "/login";</script>
-   @endif
+   @endif -->
 
  <table class="table cart-table text-center">
                                 <!-- Table Head -->

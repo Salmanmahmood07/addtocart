@@ -26,9 +26,9 @@ href="{{url('/frontend_asset')}}/css/bootstrap.min.css"
 		<h1>Creative SignIn Form</h1>
 		<div class="main-agileinfo">
 			<div class="agileits-top">
-				@if(isset(Auth::user()->email))
+				<!-- @if(isset(Auth::user()->email))
 					    <script>window.location="/home";</script>
-					   @endif
+					   @endif -->
 
 					   @if ($message = Session::get('error'))
 					   <div class="alert alert-danger alert-block">

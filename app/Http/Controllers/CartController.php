@@ -11,7 +11,7 @@ use Input;
 use Auth;
 use App\Models\User;
 use App\Models\Product;
-use App\Models\Cart;
+use App\Models\Order;
 
 class CartController extends Controller
 {
@@ -35,7 +35,7 @@ class CartController extends Controller
           ->sum('products.product_price');
 //dd($total);
           $detail['detail'] =Cart::first();
-      return view('product.cart', ['products'=>$data], ['total'=>$total])->with('detail',$detail);
+      return view('cart', ['products'=>$data], ['total'=>$total])->with('detail',$detail);
     }
 
     /**
@@ -60,7 +60,7 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function addtocart(Request $request)
+    public function addToOrder(Request $request)
     {
          // if($request->session()->has('user')){
         
@@ -88,7 +88,7 @@ class CartController extends Controller
     static function cartitem()
     {
         $user_Id=Session::get('user_id');
-        return Cart::where('user_id', $user_Id)->count();
+        return order::where('user_id', $user_Id)->count();
     }
 
     /**
@@ -111,12 +111,10 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-            $id=$request->cart_id;
-            $obj=Cart::find($id);
+            $obj = new order();
             $obj->user_id=Session::get('user_id');
             $obj->product_id=$request->product_id;
-            $obj->quantity=$request->quantity;
-            $obj->newprice=$request->newprice;
+            $obj->totalprice=$request->totalprice;
 // dd($obj)
             if($obj->save()){
               return Response::json(['success' => '1','message' => 'Cart updated Successfully']);

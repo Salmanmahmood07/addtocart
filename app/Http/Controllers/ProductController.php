@@ -22,7 +22,7 @@ class ProductController extends Controller
      */
     public function product()
     {
-        return view('product.addproduct');
+        return view('addproduct');
     }
 
     /**

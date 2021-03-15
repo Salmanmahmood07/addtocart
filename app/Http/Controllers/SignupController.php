@@ -105,8 +105,7 @@ class SignupController extends Controller
          Session::put('user_name', $data->name);
          Session::put('email', $data->email);
          //dd($data);
-          return redirect('/home');
-         //return view('/tutor.dashboard');
+          return redirect('/');
           }
        }
        else {
