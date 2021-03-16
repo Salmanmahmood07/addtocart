@@ -12,6 +12,7 @@ use Auth;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\OrderItem;
 
 class CartController extends Controller
 {
@@ -38,46 +39,84 @@ class CartController extends Controller
       return view('cart', ['products'=>$data], ['total'=>$total])->with('detail',$detail);
     }
 
+    public function addToOrder(Request $request)
+    {
+        if(!Session::has('cart')){
+            return redirect()->route('products');
+        }
+            $obj = new Order();
+            $obj->user_id=Session::get('user_id');
+            $obj->totalprice=$request->total;
+          
+            // $cart = session()->forget('cart');
+            // session()->put('cart', $cart);
+
+          if($obj->save()){
+              return Response::json(['success' => '1','message' => 'Order added Successfully']);
+            }else{
+              return Response::json(['success' => '0','validation'=>'0','message' => 'Something is wrong. Please try again.']);
+            }
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function order()
-    {
-        $userid=Session::get('user_id');
-        return DB::table('cart')
-          ->join("products","cart.product_id", "=", "products.id")
-          ->where("cart.user_id" ,  $userid)
-          ->sum('products.product_price');
-
-    }
-    
-
+   
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function addToOrder(Request $request)
+    public function orderitem()
     {
-         // if($request->session()->has('user')){
+        $products['products'] = Order::all();
+    
+        return view('orderitem')->with('products');
+    }
+    public function addorderitem(Request $request)
+    {
+        //dd(session('cart'));
         
-
-            $obj = new Cart();
-            $obj->user_id=Session::get('user_id');
-            $obj->product_id=$request->product_id;
-            $obj->quantity=1;
-            //dd($obj);
-            if($obj->save()){
-              return Response::json(['success' => '1','message' => 'Product added to cart Successfully']);
+        // if(!Session::has('cart')){
+        //     return redirect()->route('products');
+        // }
+       
+        if(session('cart')){
+            foreach (session('cart') as $key => $product) {
+            $obj = new OrderItem();
+            $obj->order_id=Session::get('user_id');
+            $obj->product_id=$product['id'];
+            $obj->quantity=$product['quantity'];
+            $obj->price=$product['price'];
+            // $sub_total = $product['price'] * $product['quantity'];
+            // $product['price'] += $sub_total;
+            
+           } 
+        }
+       
+           dd($obj);
+       
+          if($obj->save()){
+              return Response::json(['success' => '1','message' => 'Order added Successfully']);
             }else{
               return Response::json(['success' => '0','validation'=>'0','message' => 'Something is wrong. Please try again.']);
             }
-               // }
+        //$cart = new Cart($oldCart);
+        // if($cart = Session()->has('cart')){
+        //      foreach ((array)$cart as $key => $product) {
+        // $cart = $request->session()->get('cart');
+        // $cart = $request->session()->get('user_id'); 
+        // dd($cart);
+
+          // if($request->session()->has('cart')){
         
     }
+
+    
 
     /**
      * Display the specified resource.
@@ -113,6 +152,7 @@ class CartController extends Controller
     {
             $obj = new order();
             $obj->user_id=Session::get('user_id');
+
             $obj->product_id=$request->product_id;
             $obj->totalprice=$request->totalprice;
 // dd($obj)

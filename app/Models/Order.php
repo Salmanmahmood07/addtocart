@@ -12,8 +12,9 @@ class Order extends Model
     {
     	return $this->hasmany(Product::class);
     }
-    public function getuser()
+    public function user()
     {
-    	return $this->hasmany(User::class);
+    	return $this->belongsTo(User::class);
     }
+    
 }

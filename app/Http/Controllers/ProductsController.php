@@ -73,6 +73,7 @@ class ProductsController extends Controller
     protected function sessionData(Product $product)
     {
         return [
+            'id' => $product->id,
             'name' => $product->product_name,
             'quantity' => 1,
             'price' => $product->product_price,

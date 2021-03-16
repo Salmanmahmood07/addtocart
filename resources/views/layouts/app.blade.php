@@ -56,7 +56,7 @@ li a:hover {
   <li><a href="{{('/login')}}">Login</a></li>
   <li><a href="{{('/addproduct')}}">Add Product</a></li>
   <li><a href="{{('/cart')}}">Cart</a></li>
-  <li><a href="{{('/order')}}">Orders({{$totalorder}})</a></li>
+  <li><a href="{{('/orderitem')}}">Orders({{$totalorder}})</a></li>
   <li> <a href="{{ url('/home/logout') }}">Logout</a></li>
 
 </ul>
@@ -66,5 +66,6 @@ li a:hover {
 @yield('content')
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 </body>
 </html>

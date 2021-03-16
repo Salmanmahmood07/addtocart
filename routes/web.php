@@ -34,16 +34,18 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::get('/',[HomeController::class, 'index'])->name('products');
     Route::get('/addproduct',[ProductController::class, 'product']);
-    
     Route::post('/createproduct',[ProductController::class, 'create']);
-
-	Route::post('/addtocart',[CartController::class, 'addToOrder']);
+	
 	Route::post('/upcart',[CartController::class, 'store'])->name('upcart');
 	Route::get('/dcart/{id}',[CartController::class, 'destroy']);
-	Route::get('/order',[CartController::class, 'order']);
+
 	Route::get('/cart', [ProductsController::class,'cart'])->name('cart');
 	Route::get('/add-to-cart/{product}', [ProductsController::class, 'addToCart'])->name('add-cart');
 	Route::get('/change-qty/{product}', [ProductsController::class,'changeQty'])->name('change_qty');
 	Route::get('/remove/{id}', [ProductsController::class, 'removeFromCart'])->name('remove');
 	Route::get('/emptycart', [ProductsController::class, 'emptyCart'])->name('emptyCart');
+
+	Route::get('/order',[CartController::class, 'addToOrder'])->name('order');
+	Route::get('/orderitem',[CartController::class, 'orderitem']);
+	Route::get('/addorderitem',[CartController::class, 'addorderitem'])->name('addorderitem');
 });
