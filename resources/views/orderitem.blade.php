@@ -1,81 +1,51 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container">
-        <h1 class="text-center">Cart Page</h1>
-        <div class="row">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th width="50%">Product</th>
-                    <th width="22%">Total</th>
-                    <th width="10%"></th>
-                </tr>
-                </thead>
-                <tbody>
-                
-                    @foreach($products as $id => $product)
-                       
-                        <tr>
-                            <td>
-                                <img
-                                    src="{{url('/home_assets/images')}}/{{$product->user_id}}"
-                                    alt="{{$product->name}}"
-                                    class="img-fluid"
-                                    width="150"
-                                >
-                                <span>{{$product['name']}}</span>
-                            </td>
-                            <td>Rs.{{$product->totalprice}}</td>
-                            <td>
-                                
-                            </td>
-                            <td>Rs.{{$sub_total}}</td>
-                            <td>
-                                <a href="{{route('remove', [$id])}}" class="btn btn-danger btn-sm">X</a>
-                            </td>
-                        </tr>
-                    @endforeach
-           
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td>
-                        <a href="{{route('products')}}"
-                           class="btn btn-warning"
-                        >Continue Shopping</a>
-                       <!--  <form action="#" method="post">
-                            @csrf
-                            <input type="hidden" name="amount" value="{{$total}}">
-                            <button type="submit"
-                                    class="btn btn-success"
-                            >Proceed to Pay
-                            </button>
-                        </form> -->
-                        <form action="{{route('order')}}" class="d-flex">
-                            <button
-                                        type="submit"
-                                        value="up"
-                                        name="change_to"
-                                        class="btn btn-danger btn-sm"
-                                    >
-                                        Proceed to Checkout
-                                    </button>
+   <!-- column -->
 
-                             
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Users </h4>
+                                <div class="table-responsive table-hover">
+                                   
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Order_id</th>
+                                                <th>Username</th>
+                                                <th>Total Price</th>
+                                                <th>Created At</th>
+                                                <!-- <th>Total Items</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                          @php
+                                          $count=1;
+                                          @endphp
 
-                    </td>
-                    <td>
-                    
-                         <a href="{{route('emptyCart')}}" class="btn btn-danger btn-sm">Clear cart</a>
-                            
-                    </td>
-                    <td colspan="2"></td>
-                    <input type="hidden" class="form-control" value="{{$total}}" name="total" id="title" required >
-                    <td><strong>Total Rs.{{$total}}</strong></td>
-                    </form>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
+                                          @foreach($order as $or)
+                                            <tr>
+                                                <td><a href="javascript:void(0)">{{$count++}}</a></td>
+                                                <div class="content">
+
+                                                <td>{{$or->id}}</div></td>
+                                                <td>{{$or->user_id}}</td>
+                                                <td>{{$or->totalprice}}</td>
+                                                <td>
+                                                    {{$or->created_at->format('d/m/Y')}}
+                                                </td>
+                                            </tr>
+                                            
+
+                                            @endforeach
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- column -->
 @endsection

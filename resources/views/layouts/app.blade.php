@@ -1,6 +1,6 @@
 <?php 
-use App\Http\Controllers\CartController;
-$totalorder= CartController::cartitem();
+use App\Http\Controllers\OrderController;
+$totalorder= OrderController::cartitem();
 ?>
 
 <!doctype html>

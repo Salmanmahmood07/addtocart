@@ -78,17 +78,19 @@
                                     class="btn btn-success"
                             >Proceed to Pay
                             </button>
-                        </form> -->
-                        <form action="{{route('order')}}" class="d-flex">
+                        </form> --> 
+
+                        <form action="{{route('order')}}"  class="d-flex">
+                         
                             <button
                                         type="submit"
                                         value="up"
                                         name="change_to"
                                         class="btn btn-danger btn-sm"
+
                                     >
                                         Proceed to Checkout
                                     </button>
-
                              
 
                     </td>

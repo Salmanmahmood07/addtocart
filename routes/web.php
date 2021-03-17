@@ -6,7 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +36,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/addproduct',[ProductController::class, 'product']);
     Route::post('/createproduct',[ProductController::class, 'create']);
 	
-	Route::post('/upcart',[CartController::class, 'store'])->name('upcart');
-	Route::get('/dcart/{id}',[CartController::class, 'destroy']);
+	Route::post('/upcart',[OrderController::class, 'store'])->name('upcart');
+	Route::get('/dcart/{id}',[OrderController::class, 'destroy']);
 
 	Route::get('/cart', [ProductsController::class,'cart'])->name('cart');
 	Route::get('/add-to-cart/{product}', [ProductsController::class, 'addToCart'])->name('add-cart');
@@ -45,7 +45,9 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/remove/{id}', [ProductsController::class, 'removeFromCart'])->name('remove');
 	Route::get('/emptycart', [ProductsController::class, 'emptyCart'])->name('emptyCart');
 
-	Route::get('/order',[CartController::class, 'addToOrder'])->name('order');
-	Route::get('/orderitem',[CartController::class, 'orderitem']);
-	Route::get('/addorderitem',[CartController::class, 'addorderitem'])->name('addorderitem');
+	Route::get('/order',[OrderController::class, 'addToOrder'])->name('order');
+	Route::get('/orderform',[OrderController::class, 'orderform'])->name('orderform');
+	// Route::get('/addorderitem',[OrderController::class, 'addorderitem'])->name('addorderitem');
+	Route::get('/orderitem',[OrderController::class, 'orderitem']);
+	
 });
