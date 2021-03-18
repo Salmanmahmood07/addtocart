@@ -12,9 +12,10 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Order_id</th>
                                                 <th>Username</th>
                                                 <th>Total Price</th>
+                                                 <th>Order id</th>
+                                                 <th>Total Products</th>
                                                 <th>Created At</th>
                                                 <!-- <th>Total Items</th> -->
                                             </tr>
@@ -26,12 +27,15 @@
 
                                           @foreach($order as $or)
                                             <tr>
-                                                <td><a href="javascript:void(0)">{{$count++}}</a></td>
+                                                <td>
+                                                    <a href="{{route('orderitems', $or->id)}}">{{$count++}}</a>
+                                                </td>
                                                 <div class="content">
 
-                                                <td>{{$or->id}}</div></td>
-                                                <td>{{$or->user_id}}</td>
+                                                <td>{{ $or->user->name }}</div></td>
                                                 <td>{{$or->totalprice}}</td>
+                                                <td>{{$or->id}}</td>
+                                                <td>{{$or->orderItem->count()}}</td>
                                                 <td>
                                                     {{$or->created_at->format('d/m/Y')}}
                                                 </td>
@@ -39,7 +43,6 @@
                                             
 
                                             @endforeach
-
 
                                         </tbody>
                                     </table>

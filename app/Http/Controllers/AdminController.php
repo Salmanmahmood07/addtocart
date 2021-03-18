@@ -13,7 +13,7 @@ use Auth;
 use Image;
 use App\Models\Product;
 
-class ProductController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -77,9 +77,10 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function showproduct(Request $request)
     {
-        //
+        $data['products']=Product::all();
+        return view('getallproducts',$data);
     }
 
     /**
@@ -88,9 +89,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function editproduct($id)
     {
-      
+        $data['product']=Product::find($id);
+        return view('editproduct',$data);
     }
 
     /**
@@ -99,9 +101,51 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+        
+    public function updateproduct(Request $request)
     {
-        //
+       
+            $id=$request->id;
+            $image=$request->images;
+            if(!empty($image))
+            {
+          @unlink(public_path().'/home_assets/images/'.$obj->image);
+          @unlink(public_path().'/home_assets/images/thumb/'.$obj->image);
+           }
+            if(!empty($image))
+             {
+                $destinationPath =public_path().'/home_assets/images/';
+                if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+                }
+                $filename = time().$image->getClientOriginalName();
+       
+                $image->move($destinationPath, $filename);
+                $img = Image::make($destinationPath.$filename);
+                $img->resize(250, 250,
+                function ($constraint) {
+                $constraint->aspectRatio();
+                });
+                if (!file_exists($destinationPath.'thumb/')) {
+                mkdir($destinationPath.'thumb/', 0777, true);
+                }
+                $img->save($destinationPath.'/thumb/'.$filename);
+            
+            } //dd($filename);
+            $obj =Product::find($id);
+            $obj->image=$filename;
+            $obj->product_name=$request->product_name;
+            $obj->product_description=$request->product_description;
+            $obj->product_price=$request->product_price;
+    
+            if($obj->save()){
+                return Response::json(['success' => '1','message' => 'Product Updated successfully']);
+    
+              }
+              else {
+                return Response::json(['success' => '0','validation'=>'0','message' => 'Something is wrong. Please try again.']);
+    
+            }
     }
 
     /**
@@ -122,8 +166,22 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+    public function destroy($id){
+        $file = Product::find($id);
+              @unlink(public_path().'/home_assets/images/'.$file->image);
+              @unlink(public_path().'/home_assets/images/thumb/'.$file->image);
+              if($file->delete()){
+                return response()->json([
+                    'success' => '1',
+                    'message'=>'Product deleted seccessfully!'
+                  ]);
+             }
+             else{
+               return response()->json([
+                   'success' => '0',
+                   'message'=>'Something is wrong'
+                 ]);
+            }
+    
+      }
 }

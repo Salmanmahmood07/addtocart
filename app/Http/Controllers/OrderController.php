@@ -64,8 +64,8 @@ class OrderController extends Controller
                 
                 }
                 $cart = session()->forget('cart');
-
                 session()->put('cart', $cart);
+
                 return Response::json(['success' => '1','message' => 'Order added Successfully']);
 
             }else{
@@ -75,46 +75,22 @@ class OrderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the specified resource.
      *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-   
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function orderitem()
+    public function orders()
     {
-        $userid=Session::get('user_id');
-
-        $data =DB::table('orders')
-          ->join("order_items","orders.id", "=", "order_items.order_id")
-          ->select('orders.*', 'orders.id as order_id')
-          ->where("orders.user_id" ,  $userid)
-          ->get();
-          
-$order=Order::where('user_id', '=', $userid)->get();
-       
-//$data = Order::where('user_id', '=', $userid);
-       // $orderid=orderItem::all();
-       
-        // $datauser =DB::table('users')
-        //   ->join("orders","users.id", "=", "orders.user_id")
-        //   ->select('users.*', 'users.id as user_id')
-        //   ->where("orders.user_id" ,  $userid)
-        //   ->get();
-        
-          // $total = DB::table('cart')
-          // ->join("products","cart.product_id", "=", "products.id")
-          // ->where("cart.user_id" ,  $userid)
-          // ->sum('products.product_price');
-
-          // $detail['detail'] =Cart::first();
-      return view('orderitem', ['data'=>$data], ['order'=>$order]);
-            // return view('orderitem', ['products'=>$data], ['total'=>$total])->with('detail',$detail);
+        $order = Order::where('user_id', session('user_id'))->get();   
+        return view('orders', compact('order'));
+            
+    }
+    public function orderitems($id)
+    {
+         $orderitem = orderitem::where('order_id','=', $id)->get(); 
+        return view('orderitems', compact('orderitem'));
+            
     }
 
     // public function addorderitem(Request $request)
@@ -139,12 +115,7 @@ $order=Order::where('user_id', '=', $userid)->get();
     //         return redirect()->route('products');
     //         
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     static function cartitem()
     {
         $user_Id=Session::get('user_id');

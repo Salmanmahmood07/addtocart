@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SignupController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\OrderController;
 
@@ -33,8 +33,13 @@ Route::post('/user_authenticate',[SignupController::class, 'user_authenticate'])
 Route::middleware(['auth'])->group(function () {
 
 	Route::get('/',[HomeController::class, 'index'])->name('products');
-    Route::get('/addproduct',[ProductController::class, 'product']);
-    Route::post('/createproduct',[ProductController::class, 'create']);
+    Route::get('/addproduct',[AdminController::class, 'product']);
+    Route::post('/createproduct',[AdminController::class, 'create']);
+    Route::get('/showproduct',[AdminController::class, 'showproduct'])->name('showproduct');
+	Route::get('/destroy/{id}',[AdminController::class, 'destroy'])->name('destroy');
+
+    Route::get('/editproduct/{id}',[AdminController::class, 'editproduct'])->name('editproduct');
+    Route::post('/updateproduct',[AdminController::class, 'updateproduct']);
 	
 	Route::post('/upcart',[OrderController::class, 'store'])->name('upcart');
 	Route::get('/dcart/{id}',[OrderController::class, 'destroy']);
@@ -48,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/order',[OrderController::class, 'addToOrder'])->name('order');
 	Route::get('/orderform',[OrderController::class, 'orderform'])->name('orderform');
 	// Route::get('/addorderitem',[OrderController::class, 'addorderitem'])->name('addorderitem');
-	Route::get('/orderitem',[OrderController::class, 'orderitem']);
+	Route::get('/orders',[OrderController::class, 'orders']);
+	Route::get('/orderitems/{id}',[OrderController::class, 'orderitems'])->name('orderitems');
 	
 });

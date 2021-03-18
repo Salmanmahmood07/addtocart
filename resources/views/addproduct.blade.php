@@ -52,6 +52,7 @@
   <label class="col-md-4 control-label" for="filebutton"></label>
   <div class="col-md-4">
     <button type="submit" class="btn btn-primary">Add Product</button>
+    <a class="btn btn-primary" href="{{route('showproduct')}}">Get All Products</a>
   </div>
   </div>
 
