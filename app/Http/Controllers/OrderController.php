@@ -41,15 +41,15 @@ class OrderController extends Controller
     // }
 
     public function addToOrder(Request $request)
-    {
-        if (!Session::has('user_id')) {
+    {   $user = Auth::user();
+        if (!$user) {
             return redirect()->route('login');
         }
         if(!Session::has('cart')){
             return redirect()->route('products');
         }
             $order = new Order();
-            $order->user_id=Session::get('user_id');
+            $order->user_id=Auth::id();
             $order->totalprice=$request->total;
             
             if($order->save()){
@@ -82,8 +82,14 @@ class OrderController extends Controller
      */
     public function orders()
     {
-        $order = Order::where('user_id', session('user_id'))->get();   
-        return view('orders', compact('order'));
+        if (Auth::check()) {
+            $order = Order::where('user_id', Auth::id())->get();   
+            return view('orders', compact('order'));
+        }else{
+            return redirect()->route('/login');
+        }
+        
+        
             
     }
     public function orderitems($id)
@@ -114,13 +120,6 @@ class OrderController extends Controller
     //         session()->put('cart', $cart);
     //         return redirect()->route('products');
     //         
-
-    
-    static function cartitem()
-    {
-        $user_Id=Session::get('user_id');
-        return order::where('user_id', $user_Id)->count();
-    }
 
     /**
      * Show the form for editing the specified resource.

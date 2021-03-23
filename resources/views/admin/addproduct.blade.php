@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 @section('content')
 
 <form class="form-horizontal"  id="product-form" >
@@ -52,7 +52,7 @@
   <label class="col-md-4 control-label" for="filebutton"></label>
   <div class="col-md-4">
     <button type="submit" class="btn btn-primary">Add Product</button>
-    <a class="btn btn-primary" href="{{route('showproduct')}}">Get All Products</a>
+    <a class="btn btn-info" href="{{route('showproduct')}}">Get All Products</a>
   </div>
   </div>
 
@@ -84,7 +84,7 @@
                   var myForm = document.getElementById('product-form');
                   var formData = new FormData(myForm);
                     jQuery.ajax({
-                      url: "{{ url('/createproduct') }}",
+                      url: "{{ url('/admin/createproduct') }}",
                       method : 'post',
                       data: formData,
                       contentType: false,

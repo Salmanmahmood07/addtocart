@@ -8,6 +8,7 @@ use DB;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Cart;
+use Auth;
 class HomeController extends Controller
 {
     /**
@@ -15,8 +16,22 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function search(Request $request )
     {
+        // Get the search value from the request
+        $search = trim($request->input('search'));
+
+        // Search in the title and body columns from the posts table
+        $products = Product::
+            where('product_name', 'LIKE', "%{$search}%")
+            ->orWhere('product_description', 'LIKE', "%{$search}%")
+            ->get();
+
+        // Return the search view with the resluts compacted
+        return view('searchresult', compact('products'));
+    }
+    public function index()
+    {   
         $value=Session::get('user_id');
         $user=User::where('id', $value)->first();
         $data['product']=Product::all();

@@ -12,18 +12,74 @@ use Input;
 use Auth;
 use Image;
 use App\Models\Product;
+use App\Models\User;
 
 class AdminController extends Controller
 {
+  public function adminlogin()
+  {
+      return view('admin.login');
+  }
+
+  public function admin_authenticate(Request $request)
+    {
+        $messages=array(
+        'email.required'=>'This field is required',
+        'email.email'=>'Invalid Email',
+        'password.password'=>'This field is required'
+      );
+      $rules=array(
+        'email'=>'required|email',
+        'password'=>'required|min:5|max:18'
+      );
+      $validator=\Validator::make($request->all(),$rules,$messages);
+      if ($validator->fails())
+      {
+      return back()->withErrors($validator)->withInput();
+    }else {
+      $data = User::where('email','=',$request->email)->first();
+      if($data){
+        if(\Hash::check($request->password, $data->password))
+        {
+          if($data->type=='Admin'){
+
+         Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+         Session::put('admin_id', $data->id);
+         Session::put('admin_name', $data->name);
+         Session::put('email', $data->email);
+         //dd($data);
+          return redirect('/admin/addproduct');
+          }
+       }
+       else {
+             Session::flash('login_feedback', 'Invalid User.');
+             return back()->withErrors($validator)->withInput();
+           }
+     }else
+     {
+       Session::flash('login_feedback', 'Provided credentials are incorrect. Please try again');
+       return back()->withErrors($validator)->withInput();
+     }
+    }
+    }
+    // public function adminlogout()
+    // {
+    //     Auth::logout();
+    //     return redirect('/login');
+    // }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function product()
+    public function addproduct()
     {
-        return view('addproduct');
-    }
+      // if (Auth::check()) {
+      // $value=Auth::id();
+      // $admin=User::where('id', $value)->first();
+        return view('admin.addproduct');
+    
+  }
 
     /**
      * Show the form for creating a new resource.
@@ -35,10 +91,7 @@ class AdminController extends Controller
          request()->validate([
         'images' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        $obj = new Product();
-        $obj->product_name=$request->product_name;
-        $obj->product_description=$request->product_description;
-        $obj->product_price=$request->product_price;
+       
         $image=$request->images;
             if(!empty($image))
          {
@@ -58,6 +111,11 @@ class AdminController extends Controller
           mkdir($destinationPath.'thumb/', 0777, true);
         }
         $img->save($destinationPath.'/thumb/'.$filename);
+        
+        $obj = new Product();
+        $obj->product_name=$request->product_name;
+        $obj->product_description=$request->product_description;
+        $obj->product_price=$request->product_price;
         $obj->image=$filename;
 
         if($obj->save()){

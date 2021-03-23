@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Session;
 
 class ProductsController extends Controller
 {
+    // static function cartitem()
+    // {
+    //     if(Session::has('cart'))
+    //     $cart = Session::get('cart')->count();
+    //     return  $cart;
+    // }
     
     public function cart()
     {

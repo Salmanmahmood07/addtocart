@@ -9,7 +9,7 @@
                                 <div class="table-responsive table-hover">
                                    
                                     <table class="table">
-                                        <thead>
+                                        <thead class="thead-dark">
                                             <tr>
                                                 <th>#</th>
                                                 <th>Username</th>
